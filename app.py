@@ -1,3 +1,4 @@
+from crypt import methods
 from flask import Flask, jsonify, request
 from models.tasks import Task
 
@@ -44,6 +45,7 @@ def update_task(id):
     for task in tasks:
         if task.id == id:
             task_to_update = task
+            break
     
     if task_to_update == None:
         return jsonify({"message": "Não foi possível encontrar a atividade"}), 404
@@ -54,6 +56,22 @@ def update_task(id):
     # task_to_update.completed = data['completed'] # Deveria ser atualizado só no PATCH
     
     return jsonify({"message": "Tarefa atualizada com sucesso"})
+
+
+@app.route('/tasks/<int:id>', methods=['DELETE'])
+def delete_task(id):
+    task_to_delete = None
+    
+    for task in tasks:
+        if task.id == id:
+            task_to_delete = task
+            break
+    
+    if not task_to_delete:
+        return jsonify({"message": "Não foi possível encontrar a atividade"}), 404
+
+    tasks.remove(task_to_delete)
+    return jsonify({"message": "Tarefa removida com sucesso"})
 
 
 if __name__ == '__main__': # Execução manual

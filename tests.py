@@ -5,6 +5,7 @@ import requests
 BASE_URL = 'http://127.0.0.1:5000'
 tasks = []
 
+
 def test_create_task():
     new_task_data = {
         "title": "Nova tarefa",
@@ -36,4 +37,34 @@ def test_get_task():
 
 
 def  test_update_task():
-    pass
+    if tasks:
+        task_id = tasks[0]
+        payload = {
+            # "completed": False,
+            "description": "Nova descrição",
+            "title": "Título atualizado",
+        }
+        response = requests.put(f"{BASE_URL}/tasks/{task_id}", json=payload)
+        assert response.status_code == 200
+        response_body = response.json()
+        assert "message" in response_body
+        
+        # Verificando alteração
+        response = requests.get(f"{BASE_URL}/tasks/{task_id}")
+        assert response.status_code == 200
+        response_body = response.json()
+        assert response_body["title"] == payload["title"]
+        assert response_body["description"] == payload["description"]
+        # assert response_body["completed"] == payload["completed"]
+
+
+def test_delete_task():
+    if tasks:
+        task_id = tasks[0]
+        response = requests.delete(f"{BASE_URL}/tasks/{task_id}")
+        assert response.status_code == 200
+        
+        response = requests.get(f"{BASE_URL}/tasks/{task_id}")
+        assert response.status_code == 404
+        
+        

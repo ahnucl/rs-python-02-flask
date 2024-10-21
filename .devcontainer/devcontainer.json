@@ -36,7 +36,10 @@
                 "tomoki1207.selectline-statusbar",
                 // "visualstudioexptteam.intellicode-api-usage-examples",
                 // "visualstudioexptteam.vscodeintellicode"
-            ]
+            ],
+            "settings": {
+                "terminal.integrated.defaultProfile.linux": "bash"
+            }
         }
     }
 }
